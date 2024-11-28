@@ -1,5 +1,6 @@
 // popup.js
 let currentQuery = '';
+let debounceTimeout;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
@@ -11,22 +12,16 @@ document.getElementById('open-settings').addEventListener('click', () => {
     browser.runtime.openOptionsPage();
 });
 
-document.getElementById('search').addEventListener('input', async (e) => {
-    currentQuery = e.target.value;
-    const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
-    const saveFeedButton = document.getElementById('save-feed');
-    saveFeedButton.disabled = !freshrssUrl || !currentQuery;
-
-    if (!currentQuery) {
+const performSearch = async (query) => {
+    if (!query) {
         document.getElementById('results').innerHTML = '';
         return;
     }
 
-    const searchUrl = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(currentQuery)}&tags=(story)`;
+    const searchUrl = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=(story)`;
     console.log("algolia:", searchUrl);
     const response = await fetch(searchUrl);
     const data = await response.json();
-
 
     if (!response.ok) {
         console.error(`HTTP error: ${response.status}`);
@@ -41,6 +36,16 @@ document.getElementById('search').addEventListener('input', async (e) => {
       </a>
     </div>
   `).join('');
+};
+
+document.getElementById('search').addEventListener('input', async (e) => {
+    currentQuery = e.target.value;
+    const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
+    const saveFeedButton = document.getElementById('save-feed');
+    saveFeedButton.disabled = !freshrssUrl || !currentQuery;
+
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => performSearch(currentQuery), 100);
 });
 
 document.getElementById('save-feed').addEventListener('click', async () => {
@@ -49,4 +54,3 @@ document.getElementById('save-feed').addEventListener('click', async () => {
     const subscribeUrl = `${freshrssUrl}/i/?c=feed&a=add&url_rss=${encodeURIComponent(rssUrl)}`;
     browser.tabs.create({ url: subscribeUrl });
 });
-
