@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "HN RSS Search",
+  "version": "1.0",
+  "description": "Search HN and save RSS feeds to FreshRSS",
+  "permissions": [
+    "https://hn.algolia.com/*",
+    "storage",
+    "tabs"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  }
+}
