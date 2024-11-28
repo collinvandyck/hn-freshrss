@@ -22,7 +22,7 @@ document.getElementById('search').addEventListener('input', async (e) => {
         return;
     }
 
-    const searchUrl = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(currentQuery)}&tags=(story)&sortBy=created_at_i:desc`;
+    const searchUrl = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(currentQuery)}&tags=(story)`;
     console.log("algolia:", searchUrl);
     const response = await fetch(searchUrl);
     const data = await response.json();
