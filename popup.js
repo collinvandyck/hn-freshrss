@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
     const saveFeedButton = document.getElementById('save-feed');
     saveFeedButton.disabled = !freshrssUrl || !currentQuery;
+
+    document.getElementById('search').focus();
+    console.log("Focused search field");
 });
 
 document.getElementById('open-settings').addEventListener('click', () => {
@@ -18,7 +21,7 @@ const performSearch = async (query) => {
         return;
     }
 
-    const searchUrl = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=(story)`;
+    const searchUrl = `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent(query)}&tags=(story)`;
     console.log("algolia:", searchUrl);
     const response = await fetch(searchUrl);
     const data = await response.json();
@@ -45,7 +48,7 @@ document.getElementById('search').addEventListener('input', async (e) => {
     saveFeedButton.disabled = !freshrssUrl || !currentQuery;
 
     clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => performSearch(currentQuery), 100);
+    debounceTimeout = setTimeout(() => performSearch(currentQuery), 200);
 });
 
 document.getElementById('save-feed').addEventListener('click', async () => {
