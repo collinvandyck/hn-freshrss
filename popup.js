@@ -62,28 +62,62 @@ document.getElementById('save-feed').addEventListener('click', async () => {
         console.error('Missing FreshRSS configuration');
         return;
     }
-    const rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}`;
-    try {
-        console.log("popup sending message to background..");
-        const result = await browser.runtime.sendMessage({
-            type: 'saveFeed',
-            freshrssUrl,
-            apiUser,
-            apiKey,
-            rssUrl,
-            apiFolder,
-            currentQuery,
-        });
-        console.log("popup got response from background:", result);
 
-        if (!result.success) throw new Error(result.error);
+    {
+        let rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}&search_attrs=title,url`;
+        const title = `HN: ${currentQuery.trim()}`;
+        try {
+            console.log("popup sending message to background..");
+            const result = await browser.runtime.sendMessage({
+                type: 'saveFeed',
+                freshrssUrl,
+                apiUser,
+                apiKey,
+                rssUrl,
+                apiFolder,
+                currentQuery,
+                title,
+            });
+            console.log("popup got response from background:", result);
 
-        const saveFeedButton = document.getElementById('save-feed');
-        saveFeedButton.textContent = 'Saved!';
-        setTimeout(() => { saveFeedButton.textContent = 'Save Feed'; }, 2000);
-    } catch (error) {
-        console.error('Failed to save feed:', error);
-        document.getElementById('results').innerHTML = `Failed to save feed: ${error.message}`;
+            if (!result.success) throw new Error(result.error);
+
+            const saveFeedButton = document.getElementById('save-feed');
+            saveFeedButton.textContent = 'Saved!';
+            setTimeout(() => { saveFeedButton.textContent = 'Save Feed'; }, 2000);
+        } catch (error) {
+            console.error('Failed to save feed:', error);
+            document.getElementById('results').innerHTML = `Failed to save feed: ${error.message}`;
+        }
     }
+    {
+        // TODO: add one for &points=N
+        let rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}&search_attrs=title,url&comments=1`;
+        const title = `HN: ${currentQuery.trim()}: Active`;
+        try {
+            console.log("popup sending message to background..");
+            const result = await browser.runtime.sendMessage({
+                type: 'saveFeed',
+                freshrssUrl,
+                apiUser,
+                apiKey,
+                rssUrl,
+                apiFolder,
+                currentQuery,
+                title,
+            });
+            console.log("popup got response from background:", result);
+
+            if (!result.success) throw new Error(result.error);
+
+            const saveFeedButton = document.getElementById('save-feed');
+            saveFeedButton.textContent = 'Saved!';
+            setTimeout(() => { saveFeedButton.textContent = 'Save Feed'; }, 2000);
+        } catch (error) {
+            console.error('Failed to save feed:', error);
+            document.getElementById('results').innerHTML = `Failed to save feed: ${error.message}`;
+        }
+    }
+
 });
 
