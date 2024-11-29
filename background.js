@@ -5,6 +5,8 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
         const { freshrssUrl, apiUser, apiKey, rssUrl, categoryId } = message;
         const apiEndpoint = `${freshrssUrl}/api/greader.php/subscription/edit`;
         try {
+            // todo: add a form param, maybe labels/HN Searches
+            // 'title': 'my cool title',
             const request = {
                 method: 'POST',
                 headers: {
@@ -13,9 +15,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
                 },
                 body: new URLSearchParams({
                     's': `feed/${rssUrl}`,
-                    'ac': 'subscribe',
-                    'a': categoryId?.toString() || '0',
-                    'title': 'my cool title',
+                    'ac': 'subscribe'
                 })
             };
             console.log("background.js sending request:", request);
