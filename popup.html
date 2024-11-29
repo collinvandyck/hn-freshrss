@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { width: 400px; padding: 10px; }
-    .result { margin: 10px 0; padding: 5px; border: 1px solid #eee; }
-    #search-container {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    #search { flex-grow: 1; }
-    #settings-link { font-size: 12px; margin-bottom: 8px; }
-  </style>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div id="settings-link">
-    <a href="#" id="open-settings">Configure FreshRSS URL</a>
-  </div>
-  <div id="search-container">
-    <input type="text" id="search" placeholder="Search HN...">
-    <button id="save-feed" disabled>Save Feed</button>
-  </div>
-  <div id="results"></div>
-  <script src="popup.js"></script>
+    <div id="settings-link">
+        <a href="#" id="open-settings">Configure FreshRSS URL</a>
+    </div>
+
+    <div id="search-container">
+        <input type="text" id="search" placeholder="Search HN...">
+        <button id="save-feed" disabled>Save Feed</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script src="popup.js"></script>
 </body>
 </html>
