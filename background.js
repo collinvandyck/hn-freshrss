@@ -7,6 +7,11 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
         try {
             // todo: add a form param, maybe labels/HN Searches
             // 'title': 'my cool title',
+            if (apiFolder === undefined) {
+                a = '';
+            } else {
+                a = `user/collin/label/${apiFolder}`
+            }
             const request = {
                 method: 'POST',
                 headers: {
@@ -17,7 +22,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
                     's': `feed/${rssUrl}`,
                     't': 'TEST TEST TEST',
                     'ac': 'subscribe',
-                    'a': 'user/collin/label/${apiFolder}',
+                    'a': a,
                 })
             };
             console.log("background.js sending request:", request);

@@ -19,15 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const apiUser = document.getElementById('api-user').value.trim();
         const apiKey = document.getElementById('api-key').value.trim();
-        const apiFolder = parseInt(document.getElementById('api-folder').value) || 0;
+        const apiFolder = document.getElementById('api-folder').value.trim();
 
         try {
-            await browser.storage.local.set({
+            const payload = {
                 freshrssUrl: url,
                 apiUser,
                 apiKey,
                 apiFolder,
-            });
+            };
+            console.log("Storing:", payload);
+            await browser.storage.local.set(payload);
             form.style.borderColor = 'green';
         } catch (error) {
             console.error(error);
