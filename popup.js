@@ -55,8 +55,8 @@ document.getElementById('search').addEventListener('input', async (e) => {
 
 document.getElementById('save-feed').addEventListener('click', async () => {
     console.log("save feed...");
-    const { freshrssUrl, apiUser, apiKey, categoryId } = await browser.storage.local.get([
-        'freshrssUrl', 'apiUser', 'apiKey', 'categoryId'
+    const { freshrssUrl, apiUser, apiKey, apiFolder } = await browser.storage.local.get([
+        'freshrssUrl', 'apiUser', 'apiKey', 'apiFolder'
     ]);
     if (!freshrssUrl || !apiUser || !apiKey) {
         console.error('Missing FreshRSS configuration');
@@ -71,7 +71,8 @@ document.getElementById('save-feed').addEventListener('click', async () => {
             apiUser,
             apiKey,
             rssUrl,
-            categoryId
+            apiFolder,
+            currentQuery,
         });
         console.log("popup got response from background:", result);
 

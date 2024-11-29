@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('options-form');
 
-    browser.storage.local.get(['freshrssUrl', 'apiUser', 'apiKey', 'categoryId'])
-        .then(({ freshrssUrl, apiUser, apiKey, categoryId }) => {
+    browser.storage.local.get(['freshrssUrl', 'apiUser', 'apiKey', 'apiFolder'])
+        .then(({ freshrssUrl, apiUser, apiKey, apiFolder }) => {
             if (freshrssUrl) document.getElementById('freshrss-url').value = freshrssUrl;
             if (apiUser) document.getElementById('api-user').value = apiUser;
             if (apiKey) document.getElementById('api-key').value = apiKey;
-            if (categoryId) document.getElementById('category-id').value = categoryId;
+            if (apiFolder) document.getElementById('api-folder').value = folder;
         });
 
     form.onsubmit = async (e) => {
@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const apiUser = document.getElementById('api-user').value.trim();
         const apiKey = document.getElementById('api-key').value.trim();
-        const categoryId = parseInt(document.getElementById('category-id').value) || 0;
+        const apiFolder = parseInt(document.getElementById('api-folder').value) || 0;
 
         try {
             await browser.storage.local.set({
                 freshrssUrl: url,
                 apiUser,
                 apiKey,
-                categoryId
+                apiFolder,
             });
             form.style.borderColor = 'green';
         } catch (error) {
