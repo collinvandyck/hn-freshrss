@@ -17,7 +17,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
                     's': `feed/${rssUrl}`,
                     't': 'TEST TEST TEST',
                     'ac': 'subscribe',
-                    'a': 'HN Searches',
+                    'a': 'label/HN Searches',
                 })
             };
             console.log("background.js sending request:", request);
