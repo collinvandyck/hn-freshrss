@@ -52,8 +52,55 @@ document.getElementById('search').addEventListener('input', async (e) => {
 });
 
 document.getElementById('save-feed').addEventListener('click', async () => {
-    const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
+    console.log("save feed...");
+    const { freshrssUrl, apiUser, apiKey, categoryId } = await browser.storage.local.get([
+        'freshrssUrl', 'apiUser', 'apiKey', 'categoryId'
+    ]);
+
+    if (!freshrssUrl || !apiUser || !apiKey) {
+        console.error('Missing FreshRSS configuration');
+        return;
+    }
+
     const rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}`;
-    const subscribeUrl = `${freshrssUrl}/i/?c=feed&a=add&url_rss=${encodeURIComponent(rssUrl)}`;
-    browser.tabs.create({ url: subscribeUrl });
+    const apiEndpoint = `${freshrssUrl}/api/greader.php/subscription/edit`;
+
+    console.log("rssUrl", rssUrl);
+    console.log("apiEndpoint", apiEndpoint);
+    try {
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `GoogleLogin auth=${apiKey}`
+            },
+            body: new URLSearchParams({
+                'ac': 'subscribe',
+                's': `feed/${rssUrl}`,
+                'T': apiKey,
+                'categories': categoryId ? categoryId.toString() : '0'
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const saveFeedButton = document.getElementById('save-feed');
+        saveFeedButton.textContent = 'Saved!';
+        setTimeout(() => {
+            saveFeedButton.textContent = 'Save Feed';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Failed to save feed:', error);
+        document.getElementById('results').innerHTML = `Failed to save feed: ${error.message}`;
+    }
 });
+
+//document.getElementById('save-feed').addEventListener('click', async () => {
+//const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
+//const rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}`;
+//const subscribeUrl = `${freshrssUrl}/i/?c=feed&a=add&url_rss=${encodeURIComponent(rssUrl)}`;
+//browser.tabs.create({ url: subscribeUrl });
+//});
