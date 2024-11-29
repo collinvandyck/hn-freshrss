@@ -3,8 +3,14 @@
   "name": "HN RSS Search",
   "version": "1.0",
   "description": "Search HN and save RSS feeds to FreshRSS",
+  "background": {
+      "scripts": [
+          "background.js"
+      ]
+  },
   "permissions": [
     "https://hn.algolia.com/*",
+    "https://*/*",
     "storage",
     "tabs"
   ],

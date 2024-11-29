@@ -58,42 +58,27 @@ document.getElementById('save-feed').addEventListener('click', async () => {
     const { freshrssUrl, apiUser, apiKey, categoryId } = await browser.storage.local.get([
         'freshrssUrl', 'apiUser', 'apiKey', 'categoryId'
     ]);
-
     if (!freshrssUrl || !apiUser || !apiKey) {
         console.error('Missing FreshRSS configuration');
         return;
     }
-
     const rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}`;
-    const apiEndpoint = `${freshrssUrl}/api/greader.php/subscription/edit`;
-
-    console.log("rssUrl", rssUrl);
-    console.log("apiEndpoint", apiEndpoint);
     try {
-        const response = await fetch(apiEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `GoogleLogin auth=${apiKey}`
-            },
-            body: new URLSearchParams({
-                'ac': 'subscribe',
-                's': `feed/${rssUrl}`,
-                'T': apiKey,
-                'categories': categoryId ? categoryId.toString() : '0'
-            })
+        console.log("popup sending message to background..");
+        const result = await browser.runtime.sendMessage({
+            type: 'saveFeed',
+            freshrssUrl,
+            apiKey,
+            rssUrl,
+            categoryId
         });
+        console.log("popup got response from background:", result);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
-        }
+        if (!result.success) throw new Error(result.error);
 
         const saveFeedButton = document.getElementById('save-feed');
         saveFeedButton.textContent = 'Saved!';
-        setTimeout(() => {
-            saveFeedButton.textContent = 'Save Feed';
-        }, 2000);
-
+        setTimeout(() => { saveFeedButton.textContent = 'Save Feed'; }, 2000);
     } catch (error) {
         console.error('Failed to save feed:', error);
         document.getElementById('results').innerHTML = `Failed to save feed: ${error.message}`;
