@@ -3,7 +3,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
     if (message.type === 'saveFeed') {
         console.log("background.js got saveFeed message:", message);
         const { freshrssUrl, apiUser, apiKey, rssUrl, categoryId } = message;
-        const apiEndpoint = `${freshrssUrl}/api/greader.php/subscription/edit`;
+        const apiEndpoint = `${freshrssUrl}/api/greader.php/reader/api/0/subscription/edit`;
         try {
             // todo: add a form param, maybe labels/HN Searches
             // 'title': 'my cool title',
