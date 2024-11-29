@@ -5,7 +5,7 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
         const { freshrssUrl, apiKey, rssUrl, categoryId } = message;
         const apiEndpoint = `${freshrssUrl}/api/greader.php/subscription/edit`;
         try {
-            const response = await fetch(apiEndpoint, {
+            const request = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -17,8 +17,9 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
                     'T': apiKey,
                     'categories': categoryId?.toString() || '0'
                 })
-            });
-
+            };
+            console.log("background.js sending request:", request);
+            const response = await fetch(apiEndpoint, request);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return { success: true };
         } catch (error) {
