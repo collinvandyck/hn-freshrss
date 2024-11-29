@@ -68,6 +68,7 @@ document.getElementById('save-feed').addEventListener('click', async () => {
         const result = await browser.runtime.sendMessage({
             type: 'saveFeed',
             freshrssUrl,
+            apiUser,
             apiKey,
             rssUrl,
             categoryId
