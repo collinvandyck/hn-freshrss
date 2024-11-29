@@ -2,6 +2,8 @@
 let currentQuery = '';
 let debounceTimeout;
 
+console.log("Popup loading...");
+
 document.addEventListener('DOMContentLoaded', async () => {
     const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
     const saveFeedButton = document.getElementById('save-feed');
@@ -98,9 +100,3 @@ document.getElementById('save-feed').addEventListener('click', async () => {
     }
 });
 
-//document.getElementById('save-feed').addEventListener('click', async () => {
-//const { freshrssUrl } = await browser.storage.local.get('freshrssUrl');
-//const rssUrl = `https://hnrss.org/newest?q=${encodeURIComponent(currentQuery)}`;
-//const subscribeUrl = `${freshrssUrl}/i/?c=feed&a=add&url_rss=${encodeURIComponent(rssUrl)}`;
-//browser.tabs.create({ url: subscribeUrl });
-//});
