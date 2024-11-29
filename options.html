@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { padding: 16px; }
-    label { display: block; margin-bottom: 8px; }
-    input { width: 100%; margin-bottom: 16px; }
-  </style>
+    <title>HN RSS Search Options</title>
 </head>
 <body>
-  <form id="options-form">
-    <label for="freshrss-url">FreshRSS Instance URL</label>
-    <input type="text" id="freshrss-url" required>
-    <button type="submit">Save</button>
-  </form>
-  <script src="options.js"></script>
+    <form id="options-form">
+        <div>
+            <label for="freshrss-url">FreshRSS Instance URL</label>
+            <input type="text" id="freshrss-url" required>
+        </div>
+        <div>
+            <label for="api-user">API Username</label>
+            <input type="text" id="api-user">
+        </div>
+        <div>
+            <label for="api-key">API Key</label>
+            <input type="password" id="api-key">
+        </div>
+        <div>
+            <label for="category-id">Default Category ID</label>
+            <input type="number" id="category-id" value="0">
+        </div>
+        <button type="submit">Save</button>
+    </form>
+    <script src="options.js"></script>
 </body>
 </html>

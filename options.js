@@ -1,32 +1,37 @@
-// options.js
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('options-form');
 
-    browser.storage.local.get('freshrssUrl').then(({ freshrssUrl }) => {
-        if (freshrssUrl) {
-            document.getElementById('freshrss-url').value = freshrssUrl;
-        }
-    });
+    browser.storage.local.get(['freshrssUrl', 'apiUser', 'apiKey', 'categoryId'])
+        .then(({ freshrssUrl, apiUser, apiKey, categoryId }) => {
+            if (freshrssUrl) document.getElementById('freshrss-url').value = freshrssUrl;
+            if (apiUser) document.getElementById('api-user').value = apiUser;
+            if (apiKey) document.getElementById('api-key').value = apiKey;
+            if (categoryId) document.getElementById('category-id').value = categoryId;
+        });
 
     form.onsubmit = async (e) => {
         e.preventDefault();
-        const urlInput = document.getElementById('freshrss-url');
-        let url = urlInput.value.trim();
-
+        let url = document.getElementById('freshrss-url').value.trim();
         url = url.replace(/\/+$/, '');
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
             url = 'https://' + url;
         }
 
-        console.log("url", url);
-        urlInput.value = url;
+        const apiUser = document.getElementById('api-user').value.trim();
+        const apiKey = document.getElementById('api-key').value.trim();
+        const categoryId = parseInt(document.getElementById('category-id').value) || 0;
 
         try {
-            await browser.storage.local.set({ freshrssUrl: url });
-            urlInput.style.borderColor = 'green';
+            await browser.storage.local.set({
+                freshrssUrl: url,
+                apiUser,
+                apiKey,
+                categoryId
+            });
+            form.style.borderColor = 'green';
         } catch (error) {
             console.error(error);
-            urlInput.style.borderColor = 'red';
+            form.style.borderColor = 'red';
         }
     };
 });
